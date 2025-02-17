@@ -6,7 +6,10 @@
     <RootNamespace>HighQualityTextures</RootNamespace>
     <AssemblyName>HighQualityTextures</AssemblyName>
     <Nullable>disable</Nullable>
-    <!-- OutputPaths für alle Versionen zentralisiert -->
+    <!-- Basis-Pfade -->
+    <RimWorldDir>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\</RimWorldDir>
+    <RimWorldManagedDir>$(RimWorldDir)RimWorldWin64_Data\Managed\</RimWorldManagedDir>
+    <!-- Output-Pfad für Assembly -->
     <OutputPathBase>..\$(Version)\Assemblies</OutputPathBase>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
@@ -21,14 +24,24 @@
     <Version>1.3</Version>
   </PropertyGroup>
 
-  <!-- Unity-Referenzen (Pfade anpassen, da Projekt im "Source"-Ordner liegt) -->
+  <!-- Unity- und RimWorld-Referenzen -->
   <ItemGroup>
+    <!-- Harmony -->
+    <PackageReference Include="Lib.Harmony" Version="2.0.2" />
+    
+    <!-- RimWorld Core -->
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(RimWorldManagedDir)Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    
+    <!-- Unity-Module (Beispiele) -->
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(RimWorldManagedDir)UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(RimWorldManagedDir)UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <!-- Füge alle anderen Unity-Module analog hinzu -->
