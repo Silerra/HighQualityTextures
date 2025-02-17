@@ -5,48 +5,41 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HighQualityTextures</RootNamespace>
     <AssemblyName>HighQualityTextures</AssemblyName>
-    <FileAlignment>512</FileAlignment>
     <Nullable>disable</Nullable>
-    <!-- Automatische Erkennung von Quelldateien -->
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <!-- OutputPaths für alle Versionen zentralisiert -->
+    <OutputPathBase>..\$(Version)\Assemblies</OutputPathBase>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
-  <!-- Konfigurationen für Debug/Release -->
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <Optimize>false</Optimize>
-    <OutputPath>..\1.3\Assemblies\</OutputPath>
+  <!-- Konfigurationen für Versionen (1.0–1.3) -->
+  <PropertyGroup Condition="'$(Configuration)' == '1.0'">
+    <OutputPath>$(OutputPathBase)\</OutputPath>
+    <Version>1.0</Version>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == '1.3'">
+    <OutputPath>$(OutputPathBase)\net472\</OutputPath> <!-- Für 1.3-spezifische Struktur -->
+    <Version>1.3</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <Optimize>true</Optimize>
-    <OutputPath>..\1.3\Assemblies\</OutputPath>
-  </PropertyGroup>
-
-  <!-- Referenzen -->
+  <!-- Unity-Referenzen (Pfade anpassen, da Projekt im "Source"-Ordner liegt) -->
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\packages\Lib.Harmony.2.0.2\lib\net472\0Harmony.dll</HintPath>
-    </Reference>
-    <!-- Unity-Referenzen (gekürzt für Übersichtlichkeit) -->
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <!-- Weitere Unity-Module analog einfügen -->
+    <!-- Füge alle anderen Unity-Module analog hinzu -->
   </ItemGroup>
 
-  <!-- Quelldateien explizit auflisten (falls benötigt) -->
+  <!-- Quelldateien -->
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="HighQualityTextures.cs" />
-    <Compile Include="PatchModContentLoaderTexture2D.cs" />
+    <Compile Include="**/*.cs" Exclude="obj/**" /> <!-- Automatische Erkennung -->
   </ItemGroup>
 
-  <!-- Packages.config durch PackageReference ersetzen -->
+  <!-- NuGet-Pakete -->
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.3.5" />
   </ItemGroup>

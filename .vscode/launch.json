@@ -1,11 +1,12 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "Attach to RimWorld",
-        "type": "coreclr",
-        "request": "attach",
-        "processName": "RimWorldWin64"
-      }
-    ]
-  }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch RimWorld",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/../../RimWorldWin.exe",
+      "cwd": "${workspaceFolder}/../../"
+    }
+  ]
+}
