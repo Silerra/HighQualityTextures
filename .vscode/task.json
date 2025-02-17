@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+          "build",
+          "${workspaceFolder}/src/BetterPassionIcons.csproj",
+          "/p:OutputPath=../../Assemblies"
+        ],
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": "Clean",
+        "command": "dotnet",
+        "type": "process",
+        "args": [
+          "clean",
+          "${workspaceFolder}/src/BetterPassionIcons.csproj"
+        ]
+      }
+    ]
+  }
