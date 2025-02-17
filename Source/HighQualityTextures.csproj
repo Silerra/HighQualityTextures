@@ -48,6 +48,6 @@
 
   <!-- Packages.config durch PackageReference ersetzen -->
   <ItemGroup>
-    <PackageReference Include="Lib.Harmony" Version="2.0.2" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.5" />
   </ItemGroup>
 </Project>
