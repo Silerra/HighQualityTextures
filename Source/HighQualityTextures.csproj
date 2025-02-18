@@ -20,22 +20,19 @@
     <Version>1.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == '1.3'">
-    <OutputPath>$(OutputPathBase)\net472\</OutputPath> <!-- Für 1.3-spezifische Struktur -->
+    <OutputPath>$(OutputPathBase)\</OutputPath> <!-- Für 1.3-spezifische Struktur -->
     <Version>1.3</Version>
   </PropertyGroup>
 
   <!-- Unity- und RimWorld-Referenzen -->
   <ItemGroup>
-    <!-- Harmony -->
-    <PackageReference Include="Lib.Harmony" Version="2.0.2" />
-    
     <!-- RimWorld Core -->
     <Reference Include="Assembly-CSharp">
       <HintPath>$(RimWorldManagedDir)Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     
-    <!-- Unity-Module (Beispiele) -->
+    <!-- Unity-Module -->
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(RimWorldManagedDir)UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
@@ -45,11 +42,6 @@
       <Private>False</Private>
     </Reference>
     <!-- Füge alle anderen Unity-Module analog hinzu -->
-  </ItemGroup>
-
-  <!-- Quelldateien -->
-  <ItemGroup>
-    <Compile Include="**/*.cs" Exclude="obj/**" /> <!-- Automatische Erkennung -->
   </ItemGroup>
 
   <!-- NuGet-Pakete -->
