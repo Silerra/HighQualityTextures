@@ -2,6 +2,41 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Build",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build Debug",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build", "-c", "Debug"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build Release",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build", "-c", "Release"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build 1.5",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build", "-c", "1.5"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build 1.4",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build", "-c", "1.4"],
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "Build 1.3",
       "command": "dotnet",
       "type": "shell",
@@ -9,8 +44,23 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "Build 1.2",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build", "-c", "1.2"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build 1.1",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build", "-c", "1.1"],
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "Build 1.0",
       "command": "dotnet",
+      "type": "shell",
       "args": ["build", "-c", "1.0"],
       "problemMatcher": "$msCompile"
     }
