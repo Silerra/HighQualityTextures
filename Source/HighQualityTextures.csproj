@@ -59,6 +59,10 @@
     </Reference>
     
     <!-- Unity-Module -->
+    <Reference Include="UnityEngine">
+      <HintPath>$(RimWorldManagedDir)UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(RimWorldManagedDir)UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
