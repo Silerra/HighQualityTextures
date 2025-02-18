@@ -6,7 +6,10 @@
       "command": "dotnet",
       "type": "shell",
       "args": ["build"],
-      "problemMatcher": "$msCompile"
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/Source"
+      }
     },
     {
       "label": "Build 1.0",
