@@ -228,11 +228,12 @@ namespace HighQualityTextures
         }
     }
 
-    [HarmonyPatch(typeof(ModContentLoader<Texture2D>), "LoadTexture", new Type[] { typeof(VirtualFile) }), StaticConstructorOnStartup]
+    [HarmonyPatch(typeof(ModContentLoader<Texture2D>), "LoadTexture")]
     class PatchModContentLoaderTexture2D
     {
         static bool Prefix(VirtualFile file, ref Texture2D __result)
         {
+            Log.Message("Loading texture: " + file.FullPath);
             Texture2D texture2D = null;
 
             string filePath = file.FullPath;
@@ -254,7 +255,8 @@ namespace HighQualityTextures
                 texture2D.Apply(true, true);
             }
 
-            if (texture2D != null) {
+            if (texture2D != null)
+            {
                 __result = texture2D;
                 return false;
             }
