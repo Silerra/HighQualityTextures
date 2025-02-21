@@ -10,6 +10,7 @@ namespace HighQualityTextures
     {
         public HighQualityTextures(ModContentPack pack) : base(pack)
         {
+            Log.Message("HighQualityTextures: Initializing Harmony patches");
             var harmony = new Harmony("de.silerra.highqualitytextures");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }

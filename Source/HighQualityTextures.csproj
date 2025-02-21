@@ -28,8 +28,6 @@
     <!-- Ausgabepfad: HighQualityTextures/{Version}/Assemblies -->
     <OutputPath>..\$(RimWorldVersion)\Assemblies\</OutputPath>
     
-    <!-- Optional: Für RimWorld 1.5 in den Root-Assemblies-Ordner -->
-    <OutputPath Condition="'$(RimWorldVersion)' == '1.5'">..\Assemblies\</OutputPath>
     <!-- Verhindert das Kopieren aller NuGet-Abhängigkeiten -->
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
   </PropertyGroup>
