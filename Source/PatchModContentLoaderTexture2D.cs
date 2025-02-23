@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 using RimWorld.IO;
-using System;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 using Verse;
+using Log = HighQualityTextures.Utils.Log;
 
 namespace HighQualityTextures
 {
@@ -43,6 +42,15 @@ namespace HighQualityTextures
             }
 
             return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(ModContentLoader<Texture2D>), "AcceptableExtensionsTexture")]
+    class PatchModContentLoaderTexture2DExtensions
+    {
+        public static void Postfix(ref string __result)
+        {
+            __result += ", .dds";
         }
     }
 }

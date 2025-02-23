@@ -2,6 +2,7 @@
 using RimWorld;
 using System.Reflection;
 using Verse;
+using Log = HighQualityTextures.Utils.Log;
 
 namespace HighQualityTextures
 {
