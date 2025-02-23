@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using RimWorld.IO;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 using Log = HighQualityTextures.Utils.Log;
@@ -45,12 +46,13 @@ namespace HighQualityTextures
         }
     }
 
-    [HarmonyPatch(typeof(ModContentLoader<Texture2D>), "AcceptableExtensionsTexture")]
+    [HarmonyPatch(typeof(ModContentLoader<Texture2D>), nameof(ModContentLoader<Texture2D>.IsAcceptableExtension))]
     class PatchModContentLoaderTexture2DExtensions
     {
-        public static void Postfix(ref string __result)
+        private static readonly FieldInfo fieldInfo = typeof(ModContentLoader<Texture2D>).GetField("AcceptableExtensionsTexture", BindingFlags.NonPublic | BindingFlags.Static);
+        public static void Postfix(ref bool __result, string extension)
         {
-            __result += ", .dds";
+            Log.Message($"fieldInfo: {fieldInfo}");
         }
     }
 }
