@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld.IO;
 using System.IO;
-using System.Reflection;
 using UnityEngine;
 using Verse;
 using Log = HighQualityTextures.Utils.Log;
@@ -10,7 +9,7 @@ namespace HighQualityTextures
 {
 
     [HarmonyPatch(typeof(ModContentLoader<Texture2D>), "LoadTexture")]
-    class PatchModContentLoaderTexture2D
+    class Patch_ModContentLoaderTexture2D_LoadTexture
     {
         static bool Prefix(VirtualFile file, ref Texture2D __result)
         {
@@ -43,16 +42,6 @@ namespace HighQualityTextures
             }
 
             return true;
-        }
-    }
-
-    [HarmonyPatch(typeof(ModContentLoader<Texture2D>), nameof(ModContentLoader<Texture2D>.IsAcceptableExtension))]
-    class PatchModContentLoaderTexture2DExtensions
-    {
-        private static readonly FieldInfo fieldInfo = typeof(ModContentLoader<Texture2D>).GetField("AcceptableExtensionsTexture", BindingFlags.NonPublic | BindingFlags.Static);
-        public static void Postfix(ref bool __result, string extension)
-        {
-            Log.Message($"fieldInfo: {fieldInfo}");
         }
     }
 }
