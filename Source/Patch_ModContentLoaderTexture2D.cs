@@ -23,7 +23,7 @@ namespace HighQualityTextures
 
                 if (field == null)
                 {
-                    Log.Error("[YourMod] Field AcceptableExtensionsTexture not found!");
+                    Log.Error("Field AcceptableExtensionsTexture not found!");
                     return;
                 }
 
