@@ -11,7 +11,7 @@ namespace HighQualityTextures
     {
         public HighQualityTextures(ModContentPack pack) : base(pack)
         {
-            Log.Message("HighQualityTextures: Initializing Harmony patches");
+            Log.Message("Initializing Harmony patches");
             var harmony = new Harmony("de.silerra.highqualitytextures");
             // Füge ".dds" zu AcceptableExtensionsTexture hinzu
             Patch_ModContentLoaderTexture2D.PatchTextureExtensions();
