@@ -7,7 +7,6 @@ using Log = HighQualityTextures.Utils.Log;
 
 namespace HighQualityTextures
 {
-
     [HarmonyPatch(typeof(ModContentLoader<Texture2D>), "LoadTexture")]
     class Patch_ModContentLoaderTexture2D_LoadTexture
     {
@@ -17,13 +16,20 @@ namespace HighQualityTextures
             Texture2D texture2D = null;
 
             string filePath = file.FullPath;
-            string ddsPath = Path.ChangeExtension(filePath, ".dds");
-            if (File.Exists(ddsPath))
+
+            if (filePath.EndsWith(".dds", System.StringComparison.OrdinalIgnoreCase))
             {
-                texture2D = DdsLoader.Load(ddsPath);
-                texture2D.name = Path.GetFileNameWithoutExtension(filePath);
-                texture2D.filterMode = FilterMode.Trilinear;
-                texture2D.Apply(true, true);
+                texture2D = DdsLoader.Load(filePath);
+                if (texture2D != null)
+                {
+                    texture2D.name = Path.GetFileNameWithoutExtension(filePath);
+                    texture2D.filterMode = FilterMode.Trilinear;
+                    texture2D.Apply(true, true);
+                }
+                else
+                {
+                    Log.Error($"Failed to load DDS texture: {DdsLoader.error}");
+                }
             }
             else if (File.Exists(filePath))
             {
@@ -38,9 +44,11 @@ namespace HighQualityTextures
             if (texture2D != null)
             {
                 __result = texture2D;
+                Log.Message("Texture loaded successfully");
                 return false;
             }
 
+            Log.Warning("Texture loading failed");
             return true;
         }
     }
