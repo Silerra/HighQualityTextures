@@ -9,10 +9,12 @@ namespace HighQualityTextures
 {
     [HarmonyPatch(typeof(ModAssetBundlesHandler))]
     [HarmonyPatch(MethodType.Constructor)]
+    [HarmonyPatch(new Type[] { typeof(ModContentPack) })]
     public static class Patch_ModAssetBundlesHandler
     {
-        public static void Postfix()
+        public static void Postfix(ModAssetBundlesHandler __instance)
         {
+            Log.Message("Executing Postfix for ModAssetBundlesHandler constructor");
             try
             {
                 // Zugriff auf die Klasse ModAssetBundlesHandler
@@ -32,10 +34,12 @@ namespace HighQualityTextures
 
                 // Aktuelles Array auslesen
                 string[] currentExtensions = (string[])field.GetValue(null);
+                Log.Message($"Current TextureExtensions: {string.Join(", ", currentExtensions)}");
 
                 // Prüfe, ob ".dds" bereits vorhanden ist
                 if (Array.Exists(currentExtensions, ext => ext.Equals(".dds", StringComparison.OrdinalIgnoreCase)))
                 {
+                    Log.Message(".dds already exists in TextureExtensions");
                     return;
                 }
 
@@ -47,7 +51,7 @@ namespace HighQualityTextures
                 // Setze das modifizierte Array zurück
                 field.SetValue(null, newExtensions);
 
-                Log.Message("Successfully added .dds to TextureExtensions.");
+                Log.Message($"Successfully added .dds to TextureExtensions. New TextureExtensions: {string.Join(", ", newExtensions)}");
             }
             catch (Exception ex)
             {
