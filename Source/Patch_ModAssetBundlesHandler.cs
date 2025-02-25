@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 using Verse;
@@ -8,13 +7,11 @@ using Log = HighQualityTextures.Utils.Log;
 namespace HighQualityTextures
 {
     [HarmonyPatch(typeof(ModAssetBundlesHandler))]
-    [HarmonyPatch(MethodType.Constructor)]
-    [HarmonyPatch(new Type[] { typeof(ModContentPack) })]
-    public static class Patch_ModAssetBundlesHandler
+    [HarmonyPatch("ReloadAll")]
+    public static class Patch_ModAssetBundlesHandler_ReloadAll
     {
-        public static void Postfix(ModAssetBundlesHandler __instance)
+        public static void Prefix(ModAssetBundlesHandler __instance)
         {
-            Log.Message("Executing Postfix for ModAssetBundlesHandler constructor");
             try
             {
                 // Zugriff auf die Klasse ModAssetBundlesHandler
