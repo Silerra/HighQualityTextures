@@ -12,7 +12,6 @@ namespace HighQualityTextures
     {
         static bool Prefix(VirtualFile file, ref Texture2D __result)
         {
-            Log.Message("Loading texture: " + file.FullPath);
             Texture2D texture2D = null;
 
             string filePath = file.FullPath;
@@ -44,7 +43,7 @@ namespace HighQualityTextures
             if (texture2D != null)
             {
                 __result = texture2D;
-                Log.Message("Texture loaded successfully");
+                // Log.Message("Texture loaded successfully");
                 return false;
             }
 

@@ -14,14 +14,25 @@ namespace HighQualityTextures
         public static void Prefix(ModAssetBundlesHandler __instance)
         {
             FieldInfo field = AccessTools.Field(typeof(ModAssetBundlesHandler), "TextureExtensions");
-            var currentExtensions = (List<string>)field.GetValue(__instance);
-            if (!currentExtensions.Contains(".dds"))
+            if (field == null)
             {
-                currentExtensions.Add(".dds");
-                field.SetValue(__instance, currentExtensions);
-                Log.Message("Added '.dds' to TextureExtensions");
-                Log.Message($"TextureExtensions: {string.Join(", ", currentExtensions)}");
+                Log.Error("Field TextureExtensions not found!");
+                return;
             }
+
+            string[] currentExtensions = (string[])field.GetValue(null);
+            if (Array.Exists(currentExtensions, ext => ext.Equals(".dds", StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+
+            string[] newExtensions = new string[currentExtensions.Length + 1];
+            Array.Copy(currentExtensions, newExtensions, currentExtensions.Length);
+            newExtensions[newExtensions.Length - 1] = ".dds";
+
+            field.SetValue(null, newExtensions);
+            Log.Message("Added '.dds' to TextureExtensions");
+            Log.Message($"TextureExtensions: {string.Join(", ", newExtensions)}");
         }
     }
 }
