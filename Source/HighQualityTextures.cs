@@ -13,8 +13,6 @@ namespace HighQualityTextures
         {
             Log.Message("Initializing Harmony patches");
             var harmony = new Harmony("de.silerra.highqualitytextures");
-            // Füge ".dds" zu AcceptableExtensionsTexture hinzu
-            Patch_ModContentLoaderTexture2D.PatchTextureExtensions();
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
