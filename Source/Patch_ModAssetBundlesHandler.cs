@@ -31,12 +31,12 @@ namespace HighQualityTextures
 
                 // Aktuelles Array auslesen
                 string[] currentExtensions = (string[])field.GetValue(null);
-                Log.Message($"Current TextureExtensions: {string.Join(", ", currentExtensions)}");
+                // Log.Message($"Current TextureExtensions: {string.Join(", ", currentExtensions)}");
 
                 // Prüfe, ob ".dds" bereits vorhanden ist
                 if (Array.Exists(currentExtensions, ext => ext.Equals(".dds", StringComparison.OrdinalIgnoreCase)))
                 {
-                    Log.Message(".dds already exists in TextureExtensions");
+                    // Log.Message(".dds already exists in TextureExtensions");
                     return;
                 }
 
