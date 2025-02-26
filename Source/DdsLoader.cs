@@ -213,6 +213,8 @@ namespace HighQualityTextures
 
                 Texture2D texture = new Texture2D(dwWidth, dwHeight, textureFormat, dwMipMapCount > 1);
                 texture.LoadRawTextureData(dxtBytes);
+                // For some reason, the DDS files were displayed upside down. This is why they have been rotated again.
+                texture = FlipTextureVertically(texture);
                 return texture;
             }
         }
@@ -220,6 +222,25 @@ namespace HighQualityTextures
         private static bool fourCCEquals(IList<byte> bytes, string s)
         {
             return bytes[0] == s[0] && bytes[1] == s[1] && bytes[2] == s[2] && bytes[3] == s[3];
+        }
+
+        /// <summary>
+        /// Flips the given texture vertically.
+        /// </summary>
+        /// <param name="original">The original texture to be flipped.</param>
+        /// <returns>A new Texture2D object that is the vertically flipped version of the original texture.</returns>
+        private static Texture2D FlipTextureVertically(Texture2D original)
+        {
+            Texture2D flipped = new Texture2D(original.width, original.height);
+            for (int i = 0; i < original.width; i++)
+            {
+                for (int j = 0; j < original.height; j++)
+                {
+                    flipped.SetPixel(i, original.height - j - 1, original.GetPixel(i, j));
+                }
+            }
+            flipped.Apply();
+            return flipped;
         }
     }
 }
