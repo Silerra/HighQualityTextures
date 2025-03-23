@@ -214,7 +214,7 @@ namespace HighQualityTextures
                 Texture2D texture = new Texture2D(dwWidth, dwHeight, textureFormat, dwMipMapCount > 1);
                 texture.LoadRawTextureData(dxtBytes);
                 // For some reason, the DDS files were displayed upside down. This is why they have been rotated again.
-                texture = FlipTextureVertically(texture);
+                // texture = FlipTextureVertically(texture);
                 return texture;
             }
         }
