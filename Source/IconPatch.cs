@@ -9,77 +9,135 @@ using Verse;
 [HarmonyPatch(typeof(ModMetaData), "Icon", MethodType.Getter)]
 public static class IconPatch
 {
-    static Texture2D customModIcon = null;
+    public static Texture2D CustomModIcon { get => GetCustomModIcon(); set => SetcustomModIcon(value); }
+
+    private static void SetcustomModIcon(Texture2D value)
+    {
+        FieldInfo iconImageField = typeof(ModMetaData).GetField("iconImage", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (iconImageField == null)
+        {
+            Debug.LogError("Field 'iconImage' not found in ModMetaData.");
+            return;
+        } else
+        {
+            iconImageField.SetValue(null, value);
+        }
+    }
+
+    private static Texture2D GetCustomModIcon()
+    {
+        FieldInfo iconImageField = typeof(ModMetaData).GetField("iconImage", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (iconImageField == null)
+        {
+            Debug.LogError("Field 'iconImage' not found in ModMetaData.");
+            return null;
+        }
+        return iconImageField.GetValue(null) as Texture2D;
+    }
+
     // Prefix-Methode (wird vor dem Originalcode ausgeführt)
     public static bool Prefix(ModMetaData __instance, ref Texture2D __result)
     {
-        Type modType = __instance.GetType();
-
-        // Get the FieldInfo für das private Feld "rootDirInt"
-        FieldInfo rootDirFieldInfo = modType.GetField("rootDirInt", BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo iconImageWasLoadedFieldInfo = modType.GetField("iconImageWasLoaded", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        // Check if the iconImageWasLoaded field exists and retrieve its value
-        if (iconImageWasLoadedFieldInfo != null)
+        if (IsIconAlreadyLoaded(__instance))
         {
-            bool iconImageWasLoaded = (bool)iconImageWasLoadedFieldInfo.GetValue(__instance);
-            if (iconImageWasLoaded)
-            {
-                __result = customModIcon;
-                return true; // Führe den Originalcode aus, wenn das Feld bereits auf true gesetzt wurde
-            }
+            __result = CustomModIcon;
+            return true; // Originalcode ausführen
+        }
+        if (!__instance.ModIconPath.NullOrEmpty())
+        {
+            return true; // Originalcode ausführen, wenn kein benutzerdefiniertes Icon-Pfad gesetzt ist
         }
 
-        // Sicherstellen, dass das Feld existiert und seinen Wert abrufen
-        if (rootDirFieldInfo != null)
+        DirectoryInfo rootDir = GetRootDir(__instance);
+        if (rootDir == null)
         {
-            DirectoryInfo rootDirField = rootDirFieldInfo.GetValue(__instance) as DirectoryInfo;
+            Debug.LogError("Root directory is null. Ensure the field 'rootDirInt' is properly initialized.");
+            return true; // Originalcode ausführen
+        }
 
-            if (rootDirField != null)
-            {
-                string ModIconDdsImagePath = Path.Combine(rootDirField.FullName, "About", "ModIcon.dds");
+        string modIconPath = Path.Combine(rootDir.FullName, "About", "ModIcon.dds");
+        if (!File.Exists(modIconPath))
+        {
+            return true; // Originalcode ausführen, wenn keine benutzerdefinierte Icon-Datei vorhanden ist
+        }
 
-                if (File.Exists(ModIconDdsImagePath))
-                {
-                    customModIcon = DdsLoader.Load(ModIconDdsImagePath);
-                    if (customModIcon != null)
-                    {
-                        customModIcon.name = "ModIcon";
-                        customModIcon.filterMode = FilterMode.Trilinear;
-                        customModIcon.Apply(true, true);
-                    }
-                    else
-                    {
-                        Debug.LogError($"Failed to load custom icon: {DdsLoader.error}");
-                    }
+        CustomModIcon = LoadCustomIcon(modIconPath);
+        if (CustomModIcon == null)
+        {
+            Debug.LogError($"Failed to load custom icon from {modIconPath}");
+            return true; // Originalcode ausführen
+        }
 
-                    // Setze das Ergebnis des Getters
-                    __result = customModIcon;
+        __result = CustomModIcon;
+        MarkIconAsLoaded(__instance);
+        Debug.Log($"Custom Icon {modIconPath} loaded successfully.");
+        return false; // Originalcode überspringen
+    }
 
-                    // Markiere das Icon als geladen
-                    if (iconImageWasLoadedFieldInfo != null)
-                    {
-                        iconImageWasLoadedFieldInfo.SetValue(__instance, true);
-                    }
-                    else
-                    {
-                        Debug.LogError("Field 'iconImageWasLoaded' not found in ModMetaData.");
-                    }
+    // Prüft, ob das Icon bereits geladen wurde
+    private static bool IsIconAlreadyLoaded(ModMetaData instance)
+    {
+        FieldInfo iconImageWasLoadedField = instance.GetType().GetField("iconImageWasLoaded", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (iconImageWasLoadedField == null)
+        {
+            Debug.LogError("Field 'iconImageWasLoaded' not found in ModMetaData.");
+            return false;
+        }
+        // Debug.Log($"Icon was already loaded: {iconImageWasLoadedField.GetValue(instance)}");
 
-                    Debug.Log($"Custom Icon {ModIconDdsImagePath} loaded.");
-                    return false; // Überspringe den Originalcode
-                }
-            }
-            else
-            {
-                Debug.LogError("rootDirField is null. Ensure the field is properly initialized.");
-            }
+        return (bool)iconImageWasLoadedField.GetValue(instance);
+    }
+
+    private static bool IsModIconPathSet(ModMetaData instance)
+    {
+        FieldInfo modIconPathField = instance.GetType().GetField("ModIconPath");
+        if (modIconPathField == null)
+        {
+            Debug.LogError("Field 'modIconPath' not found in ModMetaData.");
+            return false;
+        }
+        // Debug.Log($"ModIconPath: {modIconPathField.GetValue(instance)}");
+
+        return !string.IsNullOrEmpty((string)modIconPathField.GetValue(instance));
+    }
+
+    // Ruft das Root-Verzeichnis des Mods ab
+    private static DirectoryInfo GetRootDir(ModMetaData instance)
+    {
+        FieldInfo rootDirField = instance.GetType().GetField("rootDirInt", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (rootDirField == null)
+        {
+            Debug.LogError("Field 'rootDirInt' not found in ModMetaData.");
+            return null;
+        }
+
+        return rootDirField.GetValue(instance) as DirectoryInfo;
+    }
+
+    // Lädt das benutzerdefinierte Icon
+    private static Texture2D LoadCustomIcon(string path)
+    {
+        Texture2D texture = DdsLoader.Load(path);
+        if (texture != null)
+        {
+            texture.name = "ModIcon";
+            texture.filterMode = FilterMode.Trilinear;
+            texture.Apply(true, true);
+        }
+        return texture;
+    }
+
+    // Markiert das Icon als geladen
+    private static void MarkIconAsLoaded(ModMetaData instance)
+    {
+        FieldInfo iconImageWasLoadedField = instance.GetType().GetField("iconImageWasLoaded", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (iconImageWasLoadedField != null)
+        {
+            iconImageWasLoadedField.SetValue(instance, true);
         }
         else
         {
-            Debug.LogError("Field 'rootDirInt' not found in ModMetaData.");
+            Debug.LogError("Field 'iconImageWasLoaded' not found in ModMetaData.");
         }
-
-        return true; // Führe den Originalcode aus, wenn kein benutzerdefiniertes Icon geladen wurde
     }
 }
