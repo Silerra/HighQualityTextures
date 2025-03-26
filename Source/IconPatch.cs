@@ -42,7 +42,7 @@ public static class IconPatch
             __result = CustomModIcon(__instance);
             return true; // Execute original code
         }
-        if (IsModIconPathSet(__instance))
+        if (!__instance.ModIconPath.NullOrEmpty())
         {
             return true; // Execute original code
         }
@@ -86,19 +86,6 @@ public static class IconPatch
         // Debug.Log($"Icon was already loaded: {iconImageWasLoadedField.GetValue(instance)}");
 
         return (bool)iconImageWasLoadedField.GetValue(instance);
-    }
-
-    private static bool IsModIconPathSet(ModMetaData instance)
-    {
-        FieldInfo modIconPathField = instance.GetType().GetField("ModIconPath");
-        if (modIconPathField == null)
-        {
-            Debug.LogError("Field 'modIconPath' not found in ModMetaData.");
-            return false;
-        }
-        // Debug.Log($"ModIconPath: {modIconPathField.GetValue(instance)}");
-
-        return !string.IsNullOrEmpty((string)modIconPathField.GetValue(instance));
     }
 
     // Ruft das Root-Verzeichnis des Mods ab
