@@ -9,22 +9,19 @@ using Verse;
 [HarmonyPatch(typeof(ModMetaData), "Icon", MethodType.Getter)]
 public static class IconPatch
 {
-    public static Texture2D CustomModIcon { get => GetCustomModIcon(); set => SetcustomModIcon(value); }
-
-    private static void SetcustomModIcon(Texture2D value)
+    private static void SetcustomModIcon(ModMetaData instance, Texture2D value)
     {
         FieldInfo iconImageField = typeof(ModMetaData).GetField("iconImage", BindingFlags.NonPublic | BindingFlags.Instance);
         if (iconImageField == null)
         {
             Debug.LogError("Field 'iconImage' not found in ModMetaData.");
             return;
-        } else
-        {
-            iconImageField.SetValue(null, value);
         }
+
+        iconImageField.SetValue(instance, value);
     }
 
-    private static Texture2D GetCustomModIcon()
+    private static Texture2D GetCustomModIcon(ModMetaData instance)
     {
         FieldInfo iconImageField = typeof(ModMetaData).GetField("iconImage", BindingFlags.NonPublic | BindingFlags.Instance);
         if (iconImageField == null)
@@ -32,46 +29,49 @@ public static class IconPatch
             Debug.LogError("Field 'iconImage' not found in ModMetaData.");
             return null;
         }
-        return iconImageField.GetValue(null) as Texture2D;
+
+        return iconImageField.GetValue(instance) as Texture2D;
     }
 
     // Prefix-Methode (wird vor dem Originalcode ausgeführt)
     public static bool Prefix(ModMetaData __instance, ref Texture2D __result)
     {
+        Texture2D CustomModIcon(ModMetaData instance) => GetCustomModIcon(instance);
         if (IsIconAlreadyLoaded(__instance))
         {
-            __result = CustomModIcon;
-            return true; // Originalcode ausführen
+            __result = CustomModIcon(__instance);
+            return true; // Execute original code
         }
-        if (!__instance.ModIconPath.NullOrEmpty())
+        if (IsModIconPathSet(__instance))
         {
-            return true; // Originalcode ausführen, wenn kein benutzerdefiniertes Icon-Pfad gesetzt ist
+            return true; // Execute original code
         }
 
         DirectoryInfo rootDir = GetRootDir(__instance);
         if (rootDir == null)
         {
             Debug.LogError("Root directory is null. Ensure the field 'rootDirInt' is properly initialized.");
-            return true; // Originalcode ausführen
+            return true; // Execute original code
         }
 
         string modIconPath = Path.Combine(rootDir.FullName, "About", "ModIcon.dds");
         if (!File.Exists(modIconPath))
         {
-            return true; // Originalcode ausführen, wenn keine benutzerdefinierte Icon-Datei vorhanden ist
+            return true; // Execute original code if no custom icon file exists
         }
 
-        CustomModIcon = LoadCustomIcon(modIconPath);
-        if (CustomModIcon == null)
+        // Set the custom mod icon
+        SetcustomModIcon(__instance, LoadCustomIcon(modIconPath));
+        if (CustomModIcon(__instance) == null)
         {
             Debug.LogError($"Failed to load custom icon from {modIconPath}");
-            return true; // Originalcode ausführen
+            return true; // Execute original code
         }
 
-        __result = CustomModIcon;
+        __result = CustomModIcon(__instance);
         MarkIconAsLoaded(__instance);
         Debug.Log($"Custom Icon {modIconPath} loaded successfully.");
-        return false; // Originalcode überspringen
+        return false; // Skip original code
     }
 
     // Prüft, ob das Icon bereits geladen wurde
