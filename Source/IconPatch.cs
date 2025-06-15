@@ -5,6 +5,7 @@ using HarmonyLib;
 using HighQualityTextures;
 using UnityEngine;
 using Verse;
+using Log = HighQualityTextures.Utils.Log;
 
 [HarmonyPatch(typeof(ModMetaData), "Icon", MethodType.Getter)]
 public static class IconPatch
@@ -14,7 +15,7 @@ public static class IconPatch
         FieldInfo iconImageField = typeof(ModMetaData).GetField("iconImage", BindingFlags.NonPublic | BindingFlags.Instance);
         if (iconImageField == null)
         {
-            Debug.LogError("Field 'iconImage' not found in ModMetaData.");
+            Log.Error("Field 'iconImage' not found in ModMetaData.");
             return;
         }
 
@@ -26,7 +27,7 @@ public static class IconPatch
         FieldInfo iconImageField = typeof(ModMetaData).GetField("iconImage", BindingFlags.NonPublic | BindingFlags.Instance);
         if (iconImageField == null)
         {
-            Debug.LogError("Field 'iconImage' not found in ModMetaData.");
+            Log.Error("Field 'iconImage' not found in ModMetaData.");
             return null;
         }
 
@@ -50,7 +51,7 @@ public static class IconPatch
         DirectoryInfo rootDir = GetRootDir(__instance);
         if (rootDir == null)
         {
-            Debug.LogError("Root directory is null. Ensure the field 'rootDirInt' is properly initialized.");
+            Log.Warning("Root directory is null. Ensure the field 'rootDirInt' is properly initialized.");
             return true; // Execute original code
         }
 
@@ -64,13 +65,13 @@ public static class IconPatch
         SetcustomModIcon(__instance, LoadCustomIcon(modIconPath));
         if (CustomModIcon(__instance) == null)
         {
-            Debug.LogError($"Failed to load custom icon from {modIconPath}");
+            Log.Error($"Failed to load custom icon from {modIconPath}");
             return true; // Execute original code
         }
 
         __result = CustomModIcon(__instance);
         MarkIconAsLoaded(__instance);
-        Debug.Log($"Custom Icon {modIconPath} loaded successfully.");
+        Log.Message($"Custom Icon {modIconPath} loaded successfully.");
         return false; // Skip original code
     }
 
@@ -80,10 +81,10 @@ public static class IconPatch
         FieldInfo iconImageWasLoadedField = instance.GetType().GetField("iconImageWasLoaded", BindingFlags.NonPublic | BindingFlags.Instance);
         if (iconImageWasLoadedField == null)
         {
-            Debug.LogError("Field 'iconImageWasLoaded' not found in ModMetaData.");
+            Log.Warning("Field 'iconImageWasLoaded' not found in ModMetaData.");
             return false;
         }
-        // Debug.Log($"Icon was already loaded: {iconImageWasLoadedField.GetValue(instance)}");
+        // Log.Log($"Icon was already loaded: {iconImageWasLoadedField.GetValue(instance)}");
 
         return (bool)iconImageWasLoadedField.GetValue(instance);
     }
@@ -94,7 +95,7 @@ public static class IconPatch
         FieldInfo rootDirField = instance.GetType().GetField("rootDirInt", BindingFlags.NonPublic | BindingFlags.Instance);
         if (rootDirField == null)
         {
-            Debug.LogError("Field 'rootDirInt' not found in ModMetaData.");
+            Log.Error("Field 'rootDirInt' not found in ModMetaData.");
             return null;
         }
 
@@ -124,7 +125,7 @@ public static class IconPatch
         }
         else
         {
-            Debug.LogError("Field 'iconImageWasLoaded' not found in ModMetaData.");
+            Log.Warning("Field 'iconImageWasLoaded' not found in ModMetaData.");
         }
     }
 }

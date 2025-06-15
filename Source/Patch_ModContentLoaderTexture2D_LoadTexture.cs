@@ -16,6 +16,8 @@ namespace HighQualityTextures
 
             string filePath = file.FullPath;
 
+            // Log.Message($"Loading texture: {filePath}");
+
             if (filePath.EndsWith(".dds", System.StringComparison.OrdinalIgnoreCase))
             {
                 texture2D = DdsLoader.Load(filePath);
@@ -29,6 +31,11 @@ namespace HighQualityTextures
                 {
                     Log.Error($"Failed to load DDS texture: {DdsLoader.error}");
                 }
+            }
+            else if (File.Exists(Path.ChangeExtension(filePath, ".dds")))
+            {
+                __result = texture2D;
+                return false;
             }
             else if (File.Exists(filePath))
             {
