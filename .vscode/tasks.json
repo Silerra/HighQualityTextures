@@ -52,6 +52,16 @@
       "type": "shell",
       "args": ["build", "-p:RimWorldVersion=1.5"],
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Release Build",
+      "type": "shell",
+      "command": "${workspaceFolder}/build_release.sh",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
     }
   ]
 }

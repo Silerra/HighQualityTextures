@@ -23,13 +23,25 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     
     <!-- Standardwert, falls keine Version angegeben -->
-    <RimWorldVersion Condition="'$(RimWorldVersion)' == ''">1.5</RimWorldVersion>
+    <RimWorldVersion Condition="'$(RimWorldVersion)' == ''">1.6</RimWorldVersion>
     
     <!-- Ausgabepfad: HighQualityTextures/{Version}/Assemblies -->
     <OutputPath>..\$(RimWorldVersion)\Assemblies\</OutputPath>
     
     <!-- Verhindert das Kopieren aller NuGet-Abhängigkeiten -->
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <!-- Windows-Pfade -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <RimWorldDir>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\</RimWorldDir>
+    <RimWorldManagedDir>$(RimWorldDir)RimWorldWin64_Data\Managed\</RimWorldManagedDir>
+  </PropertyGroup>
+
+  <!-- Linux-Pfade -->
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <RimWorldDir>~/.steam/steam/steamapps/common/RimWorld/</RimWorldDir>
+    <RimWorldManagedDir>$(RimWorldDir)RimWorldLinux_Data/Managed/</RimWorldManagedDir>
   </PropertyGroup>
 
   <!-- Unity- und RimWorld-Referenzen -->
