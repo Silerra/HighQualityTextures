@@ -3,7 +3,7 @@
 set -e
 
 RELEASE_DIR="./release"
-MOD_VERSIONS=("1.0" "1.1" "1.2" "1.3" "1.4" "1.5")
+MOD_VERSIONS=("1.0" "1.1" "1.2" "1.3" "1.4" "1.5" "1.6")
 
 rm -rf "$RELEASE_DIR"
 mkdir -p "$RELEASE_DIR"

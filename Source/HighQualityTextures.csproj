@@ -40,28 +40,28 @@
 
   <!-- Linux-Pfade -->
   <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
-    <RimWorldDir>~/.steam/steam/steamapps/common/RimWorld/</RimWorldDir>
+    <RimWorldDir>/home/$(USER)/.steam/steam/steamapps/common/RimWorld/</RimWorldDir>
     <RimWorldManagedDir>$(RimWorldDir)RimWorldLinux_Data/Managed/</RimWorldManagedDir>
   </PropertyGroup>
 
   <!-- Unity- und RimWorld-Referenzen -->
   <ItemGroup>
     <!-- RimWorld Core -->
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="$(RimWorldManagedDir)Assembly-CSharp.dll">
       <HintPath>$(RimWorldManagedDir)Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     
     <!-- Unity-Module -->
-    <Reference Include="UnityEngine">
+    <Reference Include="$(RimWorldManagedDir)UnityEngine.dll">
       <HintPath>$(RimWorldManagedDir)UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
+    <Reference Include="$(RimWorldManagedDir)UnityEngine.CoreModule.dll">
       <HintPath>$(RimWorldManagedDir)UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
+    <Reference Include="$(RimWorldManagedDir)UnityEngine.IMGUIModule.dll">
       <HintPath>$(RimWorldManagedDir)UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>

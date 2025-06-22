@@ -54,6 +54,13 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "Build 1.6",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build", "-p:RimWorldVersion=1.6"],
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "Release Build",
       "type": "shell",
       "command": "${workspaceFolder}/build_release.sh",
